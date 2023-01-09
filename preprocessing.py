@@ -28,14 +28,14 @@ def main():
     uid_index={uid:index for index, uid in enumerate(user['id'].values)}
 
     # load edges
-    edge = pd.read_csv(f"{path}edges.csv")
+    edge = pd.read_csv(f"{path}edge.csv")
 
     # load split
     split=pd.read_csv(f"{path}split.csv")
     uid_split={uid:split for uid, split in zip(split['id'].values,split['split'].values)}
 
     # load labels
-    label=pd.read_csv(f"{path}labels.csv")
+    label=pd.read_csv(f"{path}label.csv")
     uid_label={uid:label for uid, label in zip(label['id'].values,label['label'].values)}
 
 

@@ -8,13 +8,14 @@ from tqdm import tqdm
 from dataset import Twibot22
 from models.botrgcn import BotRGCN
 
+root_folder = './preprocessed_vm'
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 embedding_size = 128
 dropout = 0.3
 lr = 1e-3
 weight_decay = 5e-3
 
-dataset = Twibot22(device=device)
+dataset = Twibot22(root_folder, device=device)
 model = BotRGCN(desc_embedding_size=768, tweet_embedding_size=768, num_feature_size=5, 
                  cat_feature_size=3, embedding_dimension=embedding_size, num_relations=2, dropout=dropout)
 model.apply(model.init_weights)
@@ -34,8 +35,9 @@ def main():
     for idx, e in tqdm(enumerate(range(0, 200))):
         loss = train()
         losses.append(loss.item())
-    metrics = test()
-    print(metrics)
+        print(f"Epoch: {idx}/{200}, Loss: {loss}")
+        metrics = test()
+        print(metrics)
 
     torch.cuda.empty_cache()
 

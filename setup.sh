@@ -1,4 +1,5 @@
 #!/bin/bash
+python -m venv env
 source env/bin/activate
 pip install --upgrade setuptools
 pip install --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu117

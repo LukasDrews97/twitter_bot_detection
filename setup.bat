@@ -1,3 +1,5 @@
+python -m venv env
+./env/source/activate
 pip install --upgrade setuptools
 pip install --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu117
 pip install torch-scatter torch-sparse -f https://data.pyg.org/whl/torch-1.13.0+cu117.html
