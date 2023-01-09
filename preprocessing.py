@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from transformers import pipeline
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 path = "src/Data_test/"
 path_preprocessed = "src/Data_test/preprocessed/"
@@ -224,7 +224,7 @@ def main():
             mean_feature = torch.zeros(768)
         else:
             tweet_embeddings = []
-            for j, tweet in enumerate(tweets[0:number_of_tweets]):
+            for tweet in tweets[0:number_of_tweets]:
                 if not tweet or len(tweet) == 0:
                     tweet_embeddings.append(torch.zeros(768))
                     continue
@@ -237,7 +237,7 @@ def main():
         tweets_list.append(mean_feature)
 
     # save to disk
-    torch.save(torch.stack(tweets_list), f"{path_preprocessed}user_tweets_tensor.pt")
+    torch.save(torch.stack(tweets_list, dim=0), f"{path_preprocessed}user_tweets_tensor.pt")
 
     # clear cuda cache
     torch.cuda.empty_cache()
