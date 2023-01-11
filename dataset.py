@@ -12,29 +12,38 @@ class Twibot22(Dataset):
         path = lambda name: f"{self.root}/{name}"
         
         # load labels
-        self.labels = torch.load(path("labels.pt"), map_location=self.device)
+        labels = torch.load(path("labels.pt"), map_location=self.device)
         
         # load node features
-        self.numerical_features = torch.load(path("num_properties_tensor.pt"), map_location=self.device)
-        self.categorical_features = torch.load(path("categorical_properties_tensor.pt"), map_location=self.device)
-        self.description_embeddings = torch.load(path("user_description_embedding_tensor.pt"), map_location=self.device)
-        self.tweet_embeddings = torch.load(path("user_tweets_tensor.pt"), map_location=self.device)
-        self.merged_features = torch.cat([self.numerical_features, self.categorical_features, self.description_embeddings, self.tweet_embeddings], dim=1)
+        numerical_features = torch.load(path("num_properties_tensor.pt"), map_location=self.device)
+        categorical_features = torch.load(path("categorical_properties_tensor.pt"), map_location=self.device)
+        description_embeddings = torch.load(path("user_description_embedding_tensor.pt"), map_location=self.device)
+        tweet_embeddings = torch.load(path("user_tweets_tensor.pt"), map_location=self.device)
+        #merged_features = torch.cat([numerical_features, categorical_features, description_embeddings, tweet_embeddings], dim=1)
         
         # load edge index and types
-        self.edge_index = torch.load(path("edge_index.pt"), map_location=self.device)
-        self.edge_type = torch.load(path("edge_type.pt"), map_location=self.device)
+        edge_index = torch.load(path("edge_index.pt"), map_location=self.device)
+        edge_type = torch.load(path("edge_type.pt"), map_location=self.device)
         
         # load dataset masks
-        self.train_mask = torch.load(path("train_mask.pt"), map_location=self.device)
-        self.test_mask = torch.load(path("test_mask.pt"), map_location=self.device)
-        self.val_mask = torch.load(path("validation_mask.pt"), map_location=self.device)
+        train_mask = torch.load(path("train_mask.pt"), map_location=self.device)
+        test_mask = torch.load(path("test_mask.pt"), map_location=self.device)
+        val_mask = torch.load(path("validation_mask.pt"), map_location=self.device)
         
-        # create data object
-        self.data = Data(x=self.merged_features, edge_index=self.edge_index, edge_attr=self.edge_type, y=self.labels).to(self.device)
-        self.data.train_mask = self.train_mask
-        self.data.test_mask = self.test_mask
-        self.data.val_mask = self.val_mask
+        self.data = Data(
+            edge_index=edge_index,
+            edge_attr=edge_type,
+            y=labels,
+            description_embeddings = description_embeddings,
+            tweet_embeddings = tweet_embeddings,
+            numerical_features = numerical_features,
+            categorical_features = categorical_features,
+            train_mask = train_mask,
+            test_mask = test_mask,
+            val_mask = val_mask,
+            num_nodes = labels.shape[0]
+        )
+        
         assert self.data.validate()
         
     def len(self):

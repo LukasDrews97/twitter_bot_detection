@@ -10,3 +10,5 @@ pip install transformers
 pip install torch-geometric-temporal
 pip install torchmetrics
 pip install notebook
+pip install matplotlib
+pip install pandas
