@@ -13,21 +13,21 @@ from tqdm import tqdm
 from dataset import Twibot22
 from models.botrgcn import BotRGCN
 
-preprocessed_data_folder = '/'
+preprocessed_data_folder = './preprocessed_vm'
 result_folder = 'results/'
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 embedding_size = 128
-dropout = 0.3
+dropout = 0.1
 lr = 1e-3
-weight_decay = 5e-3
-batch_size=1024
+weight_decay = 5e-2
+batch_size = 1024
 training_epochs = 10
 num_neighbors = [256] * 4
 
 dataset = Twibot22(root=preprocessed_data_folder, device='cpu')
-model = BotRGCN(desc_embedding_size=768, tweet_embedding_size=768, num_feature_size=5, 
-                 cat_feature_size=3, embedding_dimension=128, num_relations=2, dropout=0.3)
+model = BotRGCN(desc_embedding_size=768, tweet_embedding_size=768, num_feature_size=5,
+                 cat_feature_size=3, embedding_dimension=128, num_relations=2, dropout=dropout)
 model.apply(model.init_weights)
 model.to(device)
 
