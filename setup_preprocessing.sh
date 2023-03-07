@@ -1,10 +1,11 @@
 #!/bin/bash
 
 #SBATCH --partition training
-#SBATCH --gres gpu:1
-#SBATCH -o log.out
+#SBATCH --gres gpu:1080ti:1
+#SBATCH -o pre.out
+#SBATCH --job-name=preprocessing
 #SBATCH --mail-type ALL
-#SBATCH --mail-user Lukas.Drews@student.hpi.de
+#SBATCH --mail-user XXX@student.XXX.de
 
 export PYTHONUNBUFFERED='x'
 
@@ -20,10 +21,9 @@ pip install transformers
 pip install torch-geometric-temporal
 pip install torchmetrics
 pip install notebook
-pip install matplotlib
-pip install pandas
 
 # run preprocessing
 srun python preprocessing.py
 
 echo 'Finished'
+exit 0

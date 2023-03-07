@@ -1,10 +1,11 @@
 #!/bin/bash
 
 #SBATCH --partition training
-#SBATCH --gres gpu:1
-#SBATCH -o training.out
+#SBATCH --gres gpu:1080ti:1
+#SBATCH  -o roc_test.out
+#SBATCH --job-name=retweeted_test
 #SBATCH --mail-type ALL
-#SBATCH --mail-user Lukas.Drews@student.hpi.de
+#SBATCH --mail-user XXX@student.XXX.de
 
 export PYTHONUNBUFFERED='x'
 
@@ -27,3 +28,4 @@ pip install pandas
 srun python train_with_batches.py
 
 echo 'Finished'
+exit 0

@@ -11,9 +11,9 @@ from transformers import pipeline
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-path = "src/Data_test/"
-path_preprocessed = "src/Data_test/preprocessed/"
-user_tweets_path = "src/Data_test/users/"
+path = "preprocessed_subgraph_20230220/"
+path_preprocessed = "preprocessed_subgraph_20230220/"
+#user_tweets_path = "src/Data_test/users/"
 
 def main():
     ### Load data
@@ -27,15 +27,17 @@ def main():
     user['created_at'] = pd.to_datetime(user['created_at'], utc=True)
     uid_index={uid:index for index, uid in enumerate(user['id'].values)}
 
+    
+
     # load edges
-    edge = pd.read_csv(f"{path}edge.csv")
+    edge = pd.read_csv(f"{path}edges.csv")
 
     # load split
     split=pd.read_csv(f"{path}split.csv")
     uid_split={uid:split for uid, split in zip(split['id'].values,split['split'].values)}
 
     # load labels
-    label=pd.read_csv(f"{path}label.csv")
+    label=pd.read_csv(f"{path}labels.csv")
     uid_label={uid:label for uid, label in zip(label['id'].values,label['label'].values)}
 
 
@@ -191,7 +193,7 @@ def main():
     with open(f"{path_preprocessed}id_tweet.json", 'w') as tweet_file:
         json.dump(id_tweet, tweet_file)
     
-
+    
 
     ### Create word embeddings
     print("Preprocessing: Create word embeddings")
@@ -224,7 +226,7 @@ def main():
             mean_feature = torch.zeros(768)
         else:
             tweet_embeddings = []
-            for tweet in tweets[0:number_of_tweets]:
+            for j, tweet in enumerate(tweets[0:number_of_tweets]):
                 if not tweet or len(tweet) == 0:
                     tweet_embeddings.append(torch.zeros(768))
                     continue
@@ -237,7 +239,7 @@ def main():
         tweets_list.append(mean_feature)
 
     # save to disk
-    torch.save(torch.stack(tweets_list, dim=0), f"{path_preprocessed}user_tweets_tensor.pt")
+    torch.save(torch.stack(tweets_list), f"{path_preprocessed}user_tweets_tensor.pt")
 
     # clear cuda cache
     torch.cuda.empty_cache()

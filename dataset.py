@@ -5,7 +5,7 @@ from torch_geometric.data import Data, Dataset
 from tqdm import tqdm
 
 class Twibot22(Dataset):
-    def __init__(self, root=r'src/Data_test/preprocessed', device='cpu'):
+    def __init__(self, root=r'src/Data_test/preprocessed', device='cpu', edge_index_file='edge_index.pt', edge_type_file='edge_type.pt'):
         self.root = root
         super().__init__(self.root, None, None, None)
         self.device = device
@@ -22,8 +22,11 @@ class Twibot22(Dataset):
         #merged_features = torch.cat([numerical_features, categorical_features, description_embeddings, tweet_embeddings], dim=1)
         
         # load edge index and types
-        edge_index = torch.load(path("edge_index.pt"), map_location=self.device)
-        edge_type = torch.load(path("edge_type.pt"), map_location=self.device)
+        #edge_index = torch.load(path("edge_index.pt"), map_location=self.device)
+        #edge_type = torch.load(path("edge_type.pt"), map_location=self.device)
+        edge_index = torch.load(path(edge_index_file), map_location=self.device)
+        edge_type = torch.load(path(edge_type_file), map_location=self.device)
+
         
         # load dataset masks
         train_mask = torch.load(path("train_mask.pt"), map_location=self.device)

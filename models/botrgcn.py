@@ -3,7 +3,7 @@ from torch import nn
 from torch_geometric import nn as gnn
 
 class BotRGCN(nn.Module):
-    def __init__(self, desc_embedding_size=768, tweet_embedding_size=768, num_feature_size=5,
+    def __init__(self, desc_embedding_size=768, tweet_embedding_size=768, num_feature_size=5, 
                  cat_feature_size=3, embedding_dimension=128, num_relations=2, dropout=0.3):
         super().__init__()
         self.dropout = dropout

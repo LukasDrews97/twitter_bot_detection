@@ -4,6 +4,8 @@ src/
 tmp/
 results/
 preprocessed_vm/
+jodie/
+old/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
