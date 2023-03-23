@@ -24,6 +24,7 @@ edge_type_file = 'edge_type_full_95.pt'
 
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+# Training parameters
 number_of_runs = 3
 random_seeds = [100, 200, 300, 400, 500]
 embedding_size = 128 # Default: 128
@@ -37,8 +38,10 @@ num_relations = 5
 roc_thresholds = [0.95, 0.90, 0.85, 0.80, 0.75, 0.70, 0.65, 0.60, 0.55, 0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.20, 0.15, 0.10, 0.05]
 
 dataset = Twibot22(root=preprocessed_data_folder, device='cpu', edge_index_file=edge_index_file, edge_type_file=edge_type_file)
+# Model parameters
 model_params = {'desc_embedding_size': 768, 'tweet_embedding_size': 768, 'num_feature_size': 5, 'cat_feature_size': 3, 'embedding_dimension': embedding_size, 'num_relations': num_relations, 'dropout': dropout}
 
+# Define metrics
 model_metrics = MetricCollection([
     BinaryAccuracy(),
     BinaryPrecision(),
@@ -51,6 +54,7 @@ model_metrics = MetricCollection([
     )
 
 data = dataset[0]
+# Define neighborloaders for mini-batch sampling
 train_loader = None
 test_loader = NeighborLoader(data, num_neighbors=num_neighbors, batch_size=batch_size, input_nodes=data.test_mask)
 validation_loader = NeighborLoader(data, num_neighbors=num_neighbors, batch_size=batch_size, input_nodes=data.val_mask)
@@ -62,6 +66,7 @@ def main():
     experiment_folder = f"{experiment_name}_{time}/"
     os.makedirs(result_folder + experiment_folder, exist_ok=True)
 
+    # Run training for multiple runs 
     for run in range(1, number_of_runs+1):
         set_seed(random_seeds[run-1])
         global train_loader
@@ -75,10 +80,11 @@ def main():
         validation_metrics = defaultdict(list)
         
         for e in range(training_epochs+1):
+            # Calculate loss
             loss = train_epoch(model, optimizer, criterion)
             losses.append(loss)
         
-            # calculate metrics on validation set
+            # calculate metrics on validation set every 10 epochs
             if e % 10 == 0:
                 metrics = evaluate_on_validation_set(model)
                 validation_metrics['epoch'].append(e)
@@ -111,7 +117,7 @@ def main():
                 print(f"MCC: {metrics['BinaryMatthewsCorrCoef']:.2f}")
                 print("===============================================")
     
-        # calculate metrics on test set 
+        # calculate metrics on test set after training
         metrics = evaluate_on_test_set(model)
         test_metrics['run'].append(run)
         test_metrics['seed'].append(random_seeds[run-1])
@@ -174,6 +180,7 @@ def set_seed(seed):
     torch.manual_seed(seed)
 
 def train_epoch(model, optimizer, loss_func):
+    '''Train for one epoch.'''
     model.train()
     average_loss = 0.0
     
@@ -198,6 +205,7 @@ def train_epoch(model, optimizer, loss_func):
     return average_loss
 
 def evaluate_on_test_set(model):
+    '''Evaluate on test set.'''
     model.eval()
     
     labels = []
@@ -220,6 +228,7 @@ def evaluate_on_test_set(model):
     return metrics
 
 def evaluate_on_validation_set(model):
+    '''Evaluate on validation set.'''
     model.eval()
     
     labels = []
