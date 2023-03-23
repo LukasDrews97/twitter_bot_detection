@@ -183,7 +183,7 @@ def train_epoch(model, optimizer, loss_func):
         batch = batch.to(device)
         out = model(
             batch.description_embeddings,
-            batch.tweet_embeddings, 
+            batch.tweet_embeddings,
             batch.numerical_features,
             batch.categorical_features.to(torch.float32),
             batch.edge_index,

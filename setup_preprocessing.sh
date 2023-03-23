@@ -3,7 +3,7 @@
 #SBATCH --partition training
 #SBATCH --gres gpu:2080ti:1
 #SBATCH -o preprocessing.out
-#SBATCH --job-name=preprocessinf
+#SBATCH --job-name=preprocessing
 #SBATCH --mail-type ALL
 #SBATCH --mail-user xxx@student.xxx.de
 
