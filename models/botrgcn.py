@@ -8,8 +8,6 @@ class BotRGCN(nn.Module):
         super().__init__()
         self.dropout = dropout
         
-        # TODO: use torch_geometric.nn.Sequential instead?
-        
         # user description layer
         self.desc_layer = nn.Sequential(
             nn.Linear(desc_embedding_size, int(embedding_dimension/4)),
@@ -45,27 +43,6 @@ class BotRGCN(nn.Module):
             (nn.Linear(embedding_dimension, 1), 'x -> x'),
             (nn.Sigmoid(), 'x -> x'),
             ])
-        
-        '''
-        # embedding layer
-        self.embedding_input_layer = nn.Sequential(
-            nn.Linear(embedding_dimension,embedding_dimension),
-            nn.LeakyReLU()  
-        )
-        
-        # RGCN layer
-        # TODO: replace with FastRGCNConv?
-        self.rgcn_layer = gnn.RGCNConv(embedding_dimension, embedding_dimension, num_relations=num_relations)
-        
-        # embedding output layer
-        self.embedding_output_layer_1 = nn.Sequential(
-            nn.Linear(embedding_dimension,embedding_dimension),
-            nn.LeakyReLU()  
-        )
-        
-        # output layer
-        self.output_layer = nn.Linear(embedding_dimension, 2)
-        '''
         
     def forward(self, desc_embedding, tweet_embedding, num_feature, cat_feature, edge_index, edge_type):        
         desc = self.desc_layer(desc_embedding)
