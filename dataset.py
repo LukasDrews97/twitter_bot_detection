@@ -30,6 +30,7 @@ class Twibot22(Dataset):
         test_mask = torch.load(path("test_mask.pt"), map_location=self.device)
         val_mask = torch.load(path("validation_mask.pt"), map_location=self.device)
         
+        # Create data object
         self.data = Data(
             edge_index=edge_index,
             edge_attr=edge_type,
