@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #SBATCH --partition training
-#SBATCH --gres gpu:1080ti:1
-#SBATCH -o pre.out
-#SBATCH --job-name=preprocessing
+#SBATCH --gres gpu:2080ti:1
+#SBATCH -o preprocessing.out
+#SBATCH --job-name=preprocessinf
 #SBATCH --mail-type ALL
-#SBATCH --mail-user XXX@student.XXX.de
+#SBATCH --mail-user xxx@student.xxx.de
 
 export PYTHONUNBUFFERED='x'
 

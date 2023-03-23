@@ -11,9 +11,9 @@ from transformers import pipeline
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-path = "preprocessed_subgraph_20230220/"
-path_preprocessed = "preprocessed_subgraph_20230220/"
-user_tweets_path = "src/Data_test/users/"
+path = "preprocessed_full/"
+path_preprocessed = "preprocessed_full/"
+user_tweets_path = "src/data/users/"
 
 def main():
     ### Load data
